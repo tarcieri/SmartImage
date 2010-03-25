@@ -3,7 +3,7 @@ require 'smart_image/base_canvas'
 
 class SmartImage
   # Canvas object, backed by RMagick
-  class RMagickCanvas
+  class RMagickCanvas < BaseCanvas
     def initialize(width, height)
       @canvas = Magick::Image.new width, height do
         self.background_color = "transparent"

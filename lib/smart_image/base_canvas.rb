@@ -4,7 +4,12 @@ class SmartImage
   
   # This class defines the set of methods all canvases are expected to implement
   # It also documents the set of methods that should be available for a canvas
-  class BaseAdapter
+  class BaseCanvas
+    # Create a new canvas object of the given width and height
+    def initialize(width, height)
+      raise NotImplementedError, "some silly person forgot to define a constructor"
+    end
+    
     # Destroy the canvas (if you need to)
     def destroy
       not_implemented :destroy

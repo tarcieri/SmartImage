@@ -1,6 +1,12 @@
 require 'image_size'
 require 'smart_image/ratio_calculator'
-require 'smart_image/rmagick_canvas'
+
+# Load the appropriate canvas object for the current environment
+if defined? JRUBY_VERSION
+  require 'smart_image/java_canvas'
+else
+  require 'smart_image/rmagick_canvas'
+end
 
 # SmartImage: it's like a Swiss Army Knife for images, but one of those tiny
 # ones you can keep on your keychain.
@@ -29,7 +35,11 @@ class SmartImage
     
     # Return a handle to the canvas class for this environment
     def canvas_class
-      RMagickCanvas
+      if defined? JRUBY_VERSION
+        JavaCanvas
+      else
+        RMagickCanvas
+      end
     end
   end
   
