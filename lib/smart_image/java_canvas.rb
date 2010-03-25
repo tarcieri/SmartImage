@@ -9,7 +9,7 @@ class SmartImage
     java_import java.io.ByteArrayOutputStream
     
     def initialize(width, height)
-      @canvas = BufferedImage.new width, height, BufferedImage::TYPE_INT_RGB
+      @canvas = BufferedImage.new width, height, BufferedImage::TYPE_INT_ARGB
     end
     
     # Stub out destroy
