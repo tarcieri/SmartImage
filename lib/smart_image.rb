@@ -1,6 +1,6 @@
 require 'image_size'
-require 'RMagick'
 require 'smart_image/ratio_calculator'
+require 'smart_image/rmagick_canvas'
 
 # SmartImage: it's like a Swiss Army Knife for images, but one of those tiny
 # ones you can keep on your keychain.
@@ -26,6 +26,11 @@ class SmartImage
     def file_info(path)
       info File.read(path)
     end
+    
+    # Return a handle to the canvas class for this environment
+    def canvas_class
+      RMagickCanvas
+    end
   end
   
   # Create a new SmartImage of the given width and height.  Always takes a
@@ -42,12 +47,10 @@ class SmartImage
     raise ArgumentError, "give me a block, pretty please" unless block_given?
     
     @width, @height = Integer(width), Integer(height)
-    @canvas = Magick::Image.new @width, @height do
-      self.background_color = "transparent"
-    end
+    @canvas = self.class.canvas_class.new @width, @height
     
     yield self
-    @canvas.destroy! unless @canvas.destroyed?
+    @canvas.destroy unless @canvas.destroyed?
   end
   
   # Composite the given image data onto the SmartImage
@@ -56,25 +59,24 @@ class SmartImage
   #
   # * x: coordinate of the upper left corner of the image (default 0)
   # * y: ditto, it's the y coordinate
-  # * width: an alternate width. scales and preserves original aspect ratio
-  # * height: alternate height, also scales and preserves aspect ratio
+  # * width: an alternate width
+  # * height: alternate height
   # * preserve_aspect_ratio: should the aspect ratio be preserved? (default: true)
   def composite(data, options = {})
-    img = Magick::ImageList.new
-    img.from_blob data
+    info = self.class.info data
     
     opts = {
       :x => 0,
       :y => 0,
-      :width  => img.columns,
-      :height => img.rows,
+      :width  => info.width,
+      :height => info.height,
       :preserve_aspect_ratio => true
     }.merge(options)
   
     if opts[:preserve_aspect_ratio]
       composited_size = SmartImage::RatioCalculator.new(
-        :source_width  => img.columns,
-        :source_height => img.rows,
+        :source_width  => info.width,
+        :source_height => info.height,
         :dest_width  => Integer(opts[:width]), 
         :dest_height => Integer(opts[:height])
       ).size
@@ -84,10 +86,10 @@ class SmartImage
       dest_width, dest_height = Integer(opts[:width]), Integer(opts[:height])
     end
   
-    img.thumbnail! dest_width, dest_height
-    @canvas.composite! img, opts[:x], opts[:y], Magick::OverCompositeOp
-  ensure
-    img.destroy!
+    @canvas.composite data, :width  => dest_width,
+                            :height => dest_height,
+                            :x      => opts[:x], 
+                            :y      => opts[:y]
   end
   
   # Composite a given image file onto the SmartImage.  Accepts the same options
@@ -96,8 +98,20 @@ class SmartImage
     composite File.read(file), options
   end
   
-  # Write the resulting image out to disk
-  def write(path)
-    @canvas.write path
+  # Encode the image with the given format (a file extension) and return it 
+  # as a string.  Doesn't accept any options at present.  The options hash is
+  # just there to annoy you and make you wish it had more options.
+  def encode(format, options = {})
+    # Sorry .jpeg lovers, I'm one of you too but the standard is jpg
+    format = :jpg if format.to_s == 'jpeg'
+    
+    @canvas.encode format, options
+  end
+  
+  # Write the resulting image out to disk.  Picks format based on filename.
+  # Takes the same options as encode
+  def write(path, options = {})    
+    format = File.extname(path).sub(/^\./, '')
+    File.open(path, 'w') { |file| file << encode(format, options) }
   end
 end
