@@ -25,6 +25,11 @@ class SmartImage
       not_implemented :composite
     end
     
+    # Load the given file as an alpha mask for the image
+    def alpha_mask(image_data, options = {})
+      not_implemented :alpha_mask
+    end
+    
     # Encode the image to the given format
     def encode(format, options = {})
       not_implemented :encode

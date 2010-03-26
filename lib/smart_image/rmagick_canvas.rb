@@ -4,8 +4,10 @@ require 'smart_image/base_canvas'
 class SmartImage
   # Canvas object, backed by RMagick
   class RMagickCanvas < BaseCanvas
+    include Magick
+    
     def initialize(width, height)
-      @canvas = Magick::Image.new width, height do
+      @canvas = Image.new width, height do
         self.background_color = "transparent"
       end
     end
@@ -15,7 +17,7 @@ class SmartImage
     end
     
     def composite(image_data, options = {})
-      image = Magick::ImageList.new
+      image = ImageList.new
       image.from_blob image_data
       
       opts = {
@@ -26,9 +28,22 @@ class SmartImage
       }.merge(options)      
       
       image.thumbnail! opts[:width], opts[:height]
-      @canvas.composite! image, opts[:x], opts[:y], Magick::OverCompositeOp
+      @canvas.composite! image, opts[:x], opts[:y], OverCompositeOp
     ensure
       image.destroy!
+    end
+    
+    # Load the given file as an alpha mask for the image
+    def alpha_mask(image_data, options = {})
+      mask = ImageList.new
+      mask.from_blob image_data
+      
+      # Disable this image's alpha channel to use the opacity data as a mask
+      mask.matte = false
+      puts "OMG CopyOpacityCompositeOp!!!"
+      @canvas.composite! mask, NorthWestGravity, CopyOpacityCompositeOp
+    ensure
+      mask.destroy!
     end
     
     # Encode this image into the given format (as a file extension)

@@ -106,6 +106,18 @@ class SmartImage
     composite File.read(file), options
   end
   
+  # Apply an alpha mask from the given image data.  Doesn't accept any options
+  # right now, sorry.  It's just another useless dangling options hash.
+  def alpha_mask(data, options = {})
+    @canvas.alpha_mask data
+  end
+  
+  # Apply an alpha mask from the given file.  Accepts the same options as the
+  # alpha_mask method.
+  def alpha_mask_file(file, options = {})
+    alpha_mask File.read(file), options
+  end
+  
   # Encode the image with the given format (a file extension) and return it 
   # as a string.  Doesn't accept any options at present.  The options hash is
   # just there to annoy you and make you wish it had more options.
