@@ -6,7 +6,12 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "smartimage"
     gem.summary = %Q{It's like a Swiss Army Knife for images, but one of those tiny ones you can keep on your keychain}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.description = <<-EOD
+    SmartImage provides a cross-platform solution for image compositing that works on both MRI and JRuby.
+    If using RMagick feels like swatting a fly with a nucler missile, and ImageScience just doesn't get 
+    you there, SmartImage is hopefully at that sweet spot in the middle
+    EOD
+    
     gem.email = "tony@medioh.com"
     gem.homepage = "http://github.com/tarcieri/smartimage"
     gem.authors = ["Tony Arcieri"]

@@ -9,8 +9,11 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tony Arcieri"]
-  s.date = %q{2010-03-25}
-  s.description = %q{TODO: longer description of your gem}
+  s.date = %q{2010-03-26}
+  s.description = %q{    SmartImage provides a cross-platform solution for image compositing that works on both MRI and JRuby.
+    If using RMagick feels like swatting a fly with a nucler missile, and ImageScience just doesn't get 
+    you there, SmartImage is hopefully at that sweet spot in the middle
+}
   s.email = %q{tony@medioh.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -28,6 +31,7 @@ Gem::Specification.new do |s|
      "lib/smart_image/java_canvas.rb",
      "lib/smart_image/ratio_calculator.rb",
      "lib/smart_image/rmagick_canvas.rb",
+     "smartimage.gemspec",
      "spec/fixtures/mask.png",
      "spec/fixtures/mongoose.jpg",
      "spec/smart_image_spec.rb",
@@ -51,13 +55,16 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<imagesize>, [">= 0.1.1"])
+      s.add_runtime_dependency(%q<rmagick>, [">= 2.12.2"])
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
     else
       s.add_dependency(%q<imagesize>, [">= 0.1.1"])
+      s.add_dependency(%q<rmagick>, [">= 2.12.2"])
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
     end
   else
     s.add_dependency(%q<imagesize>, [">= 0.1.1"])
+    s.add_dependency(%q<rmagick>, [">= 2.12.2"])
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
   end
 end
