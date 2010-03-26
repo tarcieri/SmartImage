@@ -14,10 +14,6 @@ class SmartImage
       @canvas.destroy!
     end
     
-    def destroyed?
-      @canvas.destroyed?
-    end
-    
     def composite(image_data, options = {})
       image = Magick::ImageList.new
       image.from_blob image_data
@@ -41,4 +37,7 @@ class SmartImage
       @canvas.to_blob
     end
   end
+  
+  # RMagick is our Canvas on everything besides JRuby.  Hope it works for you!
+  Canvas = RMagickCanvas
 end

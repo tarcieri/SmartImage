@@ -1,7 +1,7 @@
 require 'image_size'
 require 'smart_image/ratio_calculator'
 
-# Load the appropriate canvas object for the current environment
+# Load the appropriate canvas class for the current environment
 if defined? JRUBY_VERSION
   require 'smart_image/java_canvas'
 else
@@ -32,15 +32,6 @@ class SmartImage
     def file_info(path)
       info File.read(path)
     end
-    
-    # Return a handle to the canvas class for this environment
-    def canvas_class
-      if defined? JRUBY_VERSION
-        JavaCanvas
-      else
-        RMagickCanvas
-      end
-    end
   end
   
   # Create a new SmartImage of the given width and height.  Always takes a
@@ -57,10 +48,17 @@ class SmartImage
     raise ArgumentError, "give me a block, pretty please" unless block_given?
     
     @width, @height = Integer(width), Integer(height)
-    @canvas = self.class.canvas_class.new @width, @height
+    @canvas = SmartImage::Canvas.new @width, @height
     
     yield self
-    @canvas.destroy unless @canvas.destroyed?
+    @canvas.destroy
+    @canvas = DeadCanvas.new
+  end
+  
+  class DeadCanvas
+    def method_missing(*args)
+      raise ArgumentError, "your image exists only within the SmartImage.new block"
+    end
   end
   
   # Composite the given image data onto the SmartImage

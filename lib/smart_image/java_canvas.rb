@@ -12,13 +12,8 @@ class SmartImage
       @canvas = BufferedImage.new width, height, BufferedImage::TYPE_INT_ARGB
     end
     
-    # Stub out destroy
+    # Stub out destroy since Java actually garbage collects crap, unlike... C
     def destroy
-    end
-    
-    # Can't destroy objects in Java... sorry
-    def destroyed?
-      false
     end
     
     # Composite the given image data onto the canvas
@@ -46,4 +41,7 @@ class SmartImage
       String.from_java_bytes output_stream.to_byte_array
     end
   end
+  
+  # Java is our Canvas on Java, duh!
+  Canvas = JavaCanvas
 end
