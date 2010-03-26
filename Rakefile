@@ -10,6 +10,7 @@ begin
     gem.email = "tony@medioh.com"
     gem.homepage = "http://github.com/tarcieri/smartimage"
     gem.authors = ["Tony Arcieri"]
+    gem.add_dependency "imagesize", ">= 0.1.1"
     gem.add_development_dependency "rspec", ">= 1.2.9"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
