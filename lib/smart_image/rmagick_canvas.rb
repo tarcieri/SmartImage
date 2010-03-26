@@ -28,7 +28,11 @@ class SmartImage
       }.merge(options)      
       
       image.thumbnail! opts[:width], opts[:height]
-      @canvas.composite! image, opts[:x], opts[:y], OverCompositeOp
+      begin
+      	@canvas.composite! image, opts[:x], opts[:y], OverCompositeOp
+      ensure
+        image.destroy!
+      end
     end
     
     # Load the given file as an alpha mask for the image
