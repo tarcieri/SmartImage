@@ -50,3 +50,25 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+namespace :java do
+  desc 'Munge the Jeweler gemspec into a JRuby compatible one'
+  task :gemspec => 'rake:gemspec' do
+    gemspec = File.read('smartimage.gemspec')
+    
+    # Remove the last end statement
+    gemspec.sub!(/end\s*\Z/m, '')
+    
+    # Add the Java platform requirement
+    gemspec << "  s.platform = %q{java}\n"
+    
+    # Readd the end statement
+    gemspec << "end\n"
+    
+    # Remove RMagic dependencies
+    gemspec = gemspec.split("\n").reject { |line| line["<rmagick>"] }.join("\n")
+    
+    # Write the Java gemspec
+    File.open("smartimage-java.gemspec", "w") { |file| file << gemspec }
+  end
+end
