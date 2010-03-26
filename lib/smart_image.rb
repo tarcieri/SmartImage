@@ -91,11 +91,11 @@ class SmartImage
     
       dest_width, dest_height = composited_size.width, composited_size.height
     else
-      dest_width, dest_height = Integer(opts[:width]), Integer(opts[:height])
+      dest_width, dest_height = opts[:width], opts[:height]
     end
   
-    @canvas.composite data, :width  => dest_width,
-                            :height => dest_height,
+    @canvas.composite data, :width  => Intger(dest_width),
+                            :height => Integer(dest_height),
                             :x      => opts[:x], 
                             :y      => opts[:y]
   end
