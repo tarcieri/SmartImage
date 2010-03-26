@@ -40,7 +40,6 @@ class SmartImage
       
       # Disable this image's alpha channel to use the opacity data as a mask
       mask.matte = false
-      puts "OMG CopyOpacityCompositeOp!!!"
       @canvas.composite! mask, NorthWestGravity, CopyOpacityCompositeOp
     ensure
       mask.destroy!

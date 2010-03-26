@@ -34,6 +34,33 @@ class SmartImage
       graphics.draw_image image, opts[:x], opts[:y], opts[:width], opts[:height], nil
     end
     
+    # Load the given file as an alpha mask for the image
+    def alpha_mask(image_data, options = {})
+      input_stream = ByteArrayInputStream.new image_data.to_java_bytes
+      mask = ImageIO.read input_stream
+      
+      width = mask.width
+      image_data, mask_data = Java::int[width].new, Java::int[width].new
+      
+      mask.height.times do |y|
+        # fetch a line of data from each image
+        @canvas.get_rgb 0, y, width, 1, image_data, 0, 1
+        mask.get_rgb 0, y, width, 1, mask_data, 0, 1
+        
+        width.times do |x|
+          # mask away the alpha
+          color = image_data[x] & 0x00FFFFFF 
+          
+          # turn red from the mask into alpha
+          alpha = (mask_data[x] & 0x00FF0000) << 8 
+          
+          image_data[x] = color | alpha
+        end
+        
+        @canvas.set_rgb 0, y, width, 1, image_data, 0, 1
+      end
+    end
+    
     # Encode the image to the given format
     def encode(format, options = {})
       output_stream = ByteArrayOutputStream.new
