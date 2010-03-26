@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe SmartImage do
   before :all do
-    @sample_image = File.dirname(__FILE__) + '/fixtures/sample.jpg'
+    @sample_image = File.dirname(__FILE__) + '/fixtures/mongoose.jpg'
     @output_image = File.dirname(__FILE__) + '/tmp/output.png'
   end
   
@@ -10,8 +10,8 @@ describe SmartImage do
     info = SmartImage.file_info(@sample_image)
     
     info.type.should == :jpeg
-    info.width.should  == 800
-    info.height.should == 367
+    info.width.should  == 1327
+    info.height.should == 1260
   end
   
   it "composites images" do
