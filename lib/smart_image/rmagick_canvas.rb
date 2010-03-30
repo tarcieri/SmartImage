@@ -28,9 +28,11 @@ class SmartImage
       }.merge(options)      
       
       image.thumbnail! opts[:width], opts[:height]
-      @canvas.composite! image, opts[:x], opts[:y], OverCompositeOp
-    ensure
-      image.destroy!
+      begin
+      	@canvas.composite! image, opts[:x], opts[:y], OverCompositeOp
+      ensure
+        image.destroy!
+      end
     end
     
     # Load the given file as an alpha mask for the image
@@ -41,8 +43,6 @@ class SmartImage
       # Disable this image's alpha channel to use the opacity data as a mask
       mask.matte = false
       @canvas.composite! mask, NorthWestGravity, CopyOpacityCompositeOp
-    ensure
-      mask.destroy!
     end
     
     # Encode this image into the given format (as a file extension)
