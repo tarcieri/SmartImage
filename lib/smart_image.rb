@@ -32,6 +32,71 @@ class SmartImage
     def file_info(path)
       info File.read(path)
     end
+    
+    # Generate a thumbnail from the given image data
+    # Options:
+    # * width: max width of the image, or explicit width if not preserving
+    #   aspect ratio
+    # * height: ditto, except for height of course
+    # * preserve_aspect_ratio: if true, ensure image fits within the given
+    #   width/height restraints.
+    # * format: file extension you'd ordinarily apply to an output file of
+    #   the type you desire.  Supported formats are :jpg, :png, and :gif
+    #   (default :png)
+    def thumbnail(data, options = {})
+      source_info = info data
+      
+      opts = {
+        :width  => source_info.width,
+        :height => source_info.height,
+        :preserve_aspect_ratio => true,
+        :format => :png
+      }.merge(options)
+      
+      width, height = calculate_aspect_ratio source_info, opts
+      
+      # Set res so we can assign it within the SmartImage.new block
+      res = nil
+      
+      SmartImage.new(width, height) do |image|
+        image.composite data, :width  => width,
+                              :height => height,
+                              :preserve_aspect_ratio => false
+                              
+        res = image.encode opts[:format]
+      end
+      
+      res
+    end
+    
+    # Generate a thumbnail file from a given input file
+    # Accepts the same options as SmartImage.thumbnail
+    def thumbnail_file(input_path, output_path, options = {})
+      opts = {
+        :format => File.extname(output_path).sub(/^\./, '')
+      }.merge(options)
+      
+      data = SmartImage.thumbnail File.read(input_path), options
+      File.open(output_path, 'w') { |file| file << data }
+    end
+    
+    # Solve aspect ratio constraints based on source image info and
+    # a given options hash.  This is mostly an internal method but
+    # if you find it useful knock yourself out.
+    def calculate_aspect_ratio(info, options)
+      if options[:preserve_aspect_ratio]
+        composited_size = SmartImage::RatioCalculator.new(
+          :source_width  => info.width,
+          :source_height => info.height,
+          :dest_width  => Integer(options[:width]), 
+          :dest_height => Integer(options[:height])
+        ).size
+
+        return composited_size.width, composited_size.height
+      else
+        return options[:width], options[:height]
+      end
+    end
   end
   
   # Create a new SmartImage of the given width and height.  Always takes a
@@ -55,6 +120,8 @@ class SmartImage
     @canvas = DeadCanvas.new
   end
   
+  # After the SmartImage#initialize block completes, the canvas is destroyed
+  # and replaced with a DeadCanvas that doesn't let you do anything
   class DeadCanvas
     def method_missing(*args)
       raise ArgumentError, "your image exists only within the SmartImage.new block"
@@ -81,18 +148,7 @@ class SmartImage
       :preserve_aspect_ratio => true
     }.merge(options)
   
-    if opts[:preserve_aspect_ratio]
-      composited_size = SmartImage::RatioCalculator.new(
-        :source_width  => info.width,
-        :source_height => info.height,
-        :dest_width  => Integer(opts[:width]), 
-        :dest_height => Integer(opts[:height])
-      ).size
-    
-      dest_width, dest_height = composited_size.width, composited_size.height
-    else
-      dest_width, dest_height = opts[:width], opts[:height]
-    end
+    dest_width, dest_height = self.class.calculate_aspect_ratio info, opts
   
     @canvas.composite data, :width  => Integer(dest_width),
                             :height => Integer(dest_height),
