@@ -154,6 +154,17 @@ backend it should implement all methods of SmartImage::BaseCanvas, and if you
 wish to add a new method to either SmartImage or SmartImage::BaseCanvas it 
 should work across all implementations.
 
+Mailing List, Author Info
+-------------------------
+
+You can subscribe to the SmartImage mailing list by sending email to:
+
+  smartimage@librelist.com
+  
+SmartImage was created by Tony Arcieri.  You can contact him through
+github or follow him on Twitter at @bascule.  He also frequents
+IRC on freenode as tarcieri.
+
 Credits
 -------
 
