@@ -1,4 +1,5 @@
-h1. SmartImage
+SmartImage
+==========
 
 "It's like a Swiss Army Knife for images, but one of those tiny ones you can 
  keep on your keychain"
@@ -16,7 +17,8 @@ The goal of SmartImage is to support the most common image compositing tasks
 in a Ruby-like API while not becoming bloated and huge like RMagick, and also
 remaining portable across multiple Ruby implementations, including JRuby.
 
-h2. Backends
+Backends
+--------
 
 SmartImage works by implementing a platform-specific SmartImage::Canvas class
 that encompasses all of the low level image manipulation primitives.  Two such
@@ -25,7 +27,8 @@ canvases are currently available:
 * SmartImage::RMagickCanvas: a canvas backend based on the RMagick gem
 * SmartImage::JavaCanvas: a canvas backend based on Java AWT/Graphics2D APIs
 
-h2. Can it create thumbnails for my Ruby on Rails-based web application?
+Can it create thumbnails for my Ruby on Rails-based web application?
+--------------------------------------------------------------------
 
 Yes, SmartImage *CAN* create thumbnails for your Ruby on Rails-based web
 application!  And it can do it in the most cross-platform manner imaginable!
@@ -36,7 +39,7 @@ SmartImage.
 To use SmartImage in your Rails application, simply add the following to
 config/environment.rb:
 
-  config.gem 'smartimage'
+    config.gem 'smartimage'
 
 (there is an appropriate place to put this line, BTW.  The exact location
 is left as an exercise to the reader)
@@ -44,12 +47,12 @@ is left as an exercise to the reader)
 That's it!  Now wherever you would like to generate thumbnails, use the
 following:
 
-  SmartImage.thumbnail_file(
-  "path/to/input.jpg", 
-  "path/to/output.jpg", 
-  :width  => 69,
-  :height => 42
-  )
+    SmartImage.thumbnail_file(
+      "path/to/input.jpg", 
+      "path/to/output.jpg", 
+      :width  => 69,
+      :height => 42
+    )
 
 This will generate a thumbnail which is at most 69 pixels wide (but could be
 smaller) and at most 42 pixels tall (but again, could be smaller).  It looks
@@ -64,17 +67,18 @@ with their aspect ratio preserved.
 Don't like this behavior?  Want to stretch out your thumbnails all weird?
 Just turn it off:
 
-  SmartImage.thumbnail_file(
-    "path/to/input.jpg", 
-    "path/to/output.jpg", 
-    :width  => 69,
-    :height => 42,
-    :preserve_aspect_ratio => false
-  )
+    SmartImage.thumbnail_file(
+      "path/to/input.jpg", 
+      "path/to/output.jpg", 
+      :width  => 69,
+      :height => 42,
+      :preserve_aspect_ratio => false
+    )
   
 Tada!  Stretched-out images!  Yay!
 
-h2. What if I want to work with raw image data instead of files?
+What if I want to work with raw image data instead of files?
+------------------------------------------------------------
 
 SmartImage provides both file-based and data-based methods for every API.  All
 the APIs are the same, except file-based APIs have "_file" on the end.
@@ -82,9 +86,9 @@ the APIs are the same, except file-based APIs have "_file" on the end.
 For example, above we used the SmartImage.thumbnail_file API.  However, there's
 also a SmartImage.thumbnail API that works on raw image data:
 
-  thumbnail = SmartImage.thumbnail image, :width => 69, 
-                                          :height => 42, 
-                                          :format => :jpg
+    thumbnail = SmartImage.thumbnail image, :width => 69, 
+                                            :height => 42, 
+                                            :format => :jpg
                                           
 This API produces a thumbnail in-memory from the given input image, also 
 in-memory.  We've requested a .jpg thumbnail, with a max width of 69 and
@@ -92,20 +96,21 @@ a max height of 42.
 
 If an image format isn't specified, the default is PNG.
 
-h2. What other APIs are available?
+What other APIs are available?
+------------------------------
 
 SmartImage allows you to successively manipulate an image buffer.  Here's an
 example and below is the deconstruction:
 
-  SmartImage.new(69, 42) do |image|
-    image.composite_file 'mongoose.jpg', :width => 115,
-                                         :height => 95,
-                                         :preserve_aspect_ratio => false
+    SmartImage.new(69, 42) do |image|
+      image.composite_file 'mongoose.jpg', :width => 115,
+                                           :height => 95,
+                                           :preserve_aspect_ratio => false
  
-    image.alpha_mask_file 'mask.png'
-    image.composite_file  'overlay.png'
-    image.write 'output.png'
-  end
+      image.alpha_mask_file 'mask.png'
+      image.composite_file  'overlay.png'
+      image.write 'output.png'
+    end
   
 The first thing to notice is that SmartImage.new takes a width, a height, and
 a block.  Creating a new SmartImage makes a new image "canvas" that you can
@@ -123,7 +128,8 @@ After that, a glossy overlay is composited over the top of the canvas.
 When it's all done, we write to an output file.  We've specified 'output.png'
 so it will write a PNG image to the given file.
 
-h2. Credits
+Credits
+-------
 
 SmartImage assumes your Ruby interpreter supports the absurdly powerful RMagick
 library, unless you're running JRuby, in which case it uses the absurdly 
