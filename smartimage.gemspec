@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ["Tony Arcieri"]
   s.date = %q{2010-03-26}
   s.description = %q{    SmartImage provides a cross-platform solution for image compositing that works on both MRI and JRuby.
-    If using RMagick feels like swatting a fly with a nucler missile, and ImageScience just doesn't get 
+    If using RMagick feels like swatting a fly with a nuclear missile, and ImageScience just doesn't get 
     you there, SmartImage is hopefully at that sweet spot in the middle
 }
   s.email = %q{tony@medioh.com}
