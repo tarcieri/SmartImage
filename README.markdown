@@ -135,4 +135,4 @@ SmartImage assumes your Ruby interpreter supports the absurdly powerful RMagick
 library, unless you're running JRuby, in which case it uses the absurdly 
 powerful Java Graphics2D library and AWT.
 
-Mongoose courtesy Wikimedia Commons: http://en.wikipedia.org/wiki/File:Mongoose.jpg
+[Mongoose courtesy Wikimedia Commons](http://en.wikipedia.org/wiki/File:Mongoose.jpg)
