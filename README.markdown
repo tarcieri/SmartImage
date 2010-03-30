@@ -114,7 +114,12 @@ example and below is the deconstruction:
   
 The first thing to notice is that SmartImage.new takes a width, a height, and
 a block.  Creating a new SmartImage makes a new image "canvas" that you can
-draw to.
+draw to.  However, all the drawing must take place within the block.  You
+can't do things with SmartImages outside the block.  The block yields you
+a SmartImage object that you can manipulate willy nilly within the block.
+But after the block, it's kaput, sorry.  This is because certain silly C 
+extensions lack the ability to garbage collect memory safely and require safe
+allocation and deallocation of memory.
 
 The first thing we do is composite an image file onto the buffer.  Just like
 the SmartImage.thumbnail_file method we give it an options has with a width,
@@ -127,6 +132,27 @@ After that, a glossy overlay is composited over the top of the canvas.
 
 When it's all done, we write to an output file.  We've specified 'output.png'
 so it will write a PNG image to the given file.
+
+Doesn't RMagick leak memory?
+----------------------------
+
+It does if you use it wrong.  There are experimental attempts to safely garbage
+collect RMagick images.  However, your best bet is to work with an API which is
+designed so you can't leak memory, which is exactly what SmartImage provides.
+
+SmartImage would be over 9000 times better if it...
+---------------------------------------------------
+
+Please fork me!  I'm sure there's a whole world of better backends that 
+SmartImage could be using on MRI-like interpreters than RMagick.  Imagine a
+lightweight FFI wrapper to libfreeimage or something to that effect.
+
+If there's something SmartImage doesn't do that you'd like it do to, please
+send me a pull request.  Just keep in mind that cross-implementation 
+consistency is a major focus of SmartImage, so if you implement a new image
+backend it should implement all methods of SmartImage::BaseCanvas, and if you
+wish to add a new method to either SmartImage or SmartImage::BaseCanvas it 
+should work across all implementations.
 
 Credits
 -------
