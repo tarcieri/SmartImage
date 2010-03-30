@@ -41,4 +41,11 @@ describe SmartImage do
       image.write @output_dir + 'alpha_mask.png'
     end
   end
+  
+  it "generates thumbnails" do
+    output = @output_dir + 'thumbnail.jpg'
+    
+    SmartImage.thumbnail_file @mongoose, output, :width  => 115,
+                                                 :height => 95
+  end
 end
