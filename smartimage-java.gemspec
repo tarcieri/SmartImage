@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{smartimage}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tony Arcieri"]
-  s.date = %q{2010-03-26}
+  s.date = %q{2010-03-30}
   s.description = %q{    SmartImage provides a cross-platform solution for image compositing that works on both MRI and JRuby.
     If using RMagick feels like swatting a fly with a nucler missile, and ImageScience just doesn't get 
     you there, SmartImage is hopefully at that sweet spot in the middle
@@ -17,13 +17,13 @@ Gem::Specification.new do |s|
   s.email = %q{tony@medioh.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.textile"
+     "README.markdown"
   ]
   s.files = [
     ".document",
      ".gitignore",
      "LICENSE",
-     "README.textile",
+     "README.markdown",
      "Rakefile",
      "VERSION",
      "lib/smart_image.rb",
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "lib/smart_image/java_canvas.rb",
      "lib/smart_image/ratio_calculator.rb",
      "lib/smart_image/rmagick_canvas.rb",
+     "lib/smartimage.rb",
      "smartimage-java.gemspec",
      "smartimage.gemspec",
      "spec/fixtures/mask.png",
