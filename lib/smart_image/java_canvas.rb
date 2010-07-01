@@ -1,3 +1,4 @@
+require 'java'
 require 'smart_image/base_canvas'
 
 class SmartImage
