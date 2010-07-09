@@ -179,7 +179,10 @@ class SmartImage
   # just there to annoy you and make you wish it had more options.
   def encode(format, options = {})
     # Sorry .jpeg lovers, I'm one of you too but the standard is jpg
-    format = :jpg if format.to_s == 'jpeg'
+    format = 'jpg' if format.to_s == 'jpeg'
+    format = format.to_s
+    
+    raise ArgumentError, "invalid format: #{format}" unless %w(jpg png gif).include?(format)
     
     @canvas.encode format, options
   end
