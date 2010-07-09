@@ -76,7 +76,7 @@ class SmartImage
         :format => File.extname(output_path).sub(/^\./, '')
       }.merge(options)
       
-      data = SmartImage.thumbnail File.read(input_path), options
+      data = SmartImage.thumbnail File.read(input_path), opts
       File.open(output_path, 'w') { |file| file << data }
     end
     
