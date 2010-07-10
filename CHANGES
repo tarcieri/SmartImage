@@ -1,3 +1,11 @@
+0.0.4:
+
+* Fixed bug in processing alpha channel of JRuby canvas objects when saving
+  .jpgs, causing color channel corruption.
+
+* Fixed bug in SmartImage.thumbnail_file where images are always saved as .pngs
+  regardless of the specified file extension.
+
 0.0.3:
 
 * JRuby 1.5.1 compatibility fixes
