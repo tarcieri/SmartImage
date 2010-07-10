@@ -10,6 +10,7 @@ class SmartImage
     java_import java.io.ByteArrayOutputStream
     
     def initialize(width, height)
+      @width, @height = width, height
       @canvas = BufferedImage.new width, height, BufferedImage::TYPE_INT_ARGB
     end
     
@@ -64,8 +65,19 @@ class SmartImage
     
     # Encode the image to the given format
     def encode(format, options = {})
+      case format
+      when 'jpg'
+        # If we're trying to save an JPEG, we need to convert it to RGB
+        canvas = BufferedImage.new @width, @height, BufferedImage::TYPE_INT_RGB
+        
+        graphics = canvas.graphics
+        graphics.draw_image @canvas, 0, 0, @width, @height, nil
+      else
+        canvas = @canvas
+      end
+      
       output_stream = ByteArrayOutputStream.new
-      ImageIO.write(@canvas, format.to_s, output_stream)
+      ImageIO.write(canvas, format, output_stream)
       String.from_java_bytes output_stream.to_byte_array
     end
   end
