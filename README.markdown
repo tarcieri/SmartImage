@@ -44,6 +44,13 @@ config/environment.rb:
 (there is an appropriate place to put this line, BTW.  The exact location
 is left as an exercise to the reader)
 
+
+You can also 
+
+     $ gem install smartimage # now use it like 
+     >> require 'rubygems'
+     >> require 'smartimage'
+
 That's it!  Now wherever you would like to generate thumbnails, use the
 following:
 
