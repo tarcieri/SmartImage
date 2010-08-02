@@ -103,6 +103,13 @@ a max height of 42.
 
 If an image format isn't specified, the default is PNG.
 
+Converting image types:
+------------------------------
+
+This is similar to the above, but like
+
+    converted_image = SmartImage.thumbnail image, :format => :jpg # default is to convert to png, available "to" types are jpg, png, gif.
+
 What other APIs are available?
 ------------------------------
 
